@@ -1,0 +1,1437 @@
+// Alternate method to declare the class
+// in order to minimize the
+// memory allocation work
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class node {
+public:
+	int data;
+	node* next;
+
+	// A constructor is called here
+	node(int value)
+	{
+
+		// It automatically assigns the
+		// value to the data
+		data = value;
+
+		// Next pointer is pointed to NULL
+		next = NULL;
+	}
+};
+
+// Function to insert an element
+// at head position
+void insertathead(node*& head, int val)
+{
+	node* n = new node(val);
+	n->next = head;
+	head = n;
+}
+
+// Function to insert a element
+// at a specified position
+void insertafter(node* head, int key, int val)
+{
+	node* n = new node(val);
+	if (key == head->data) {
+		n->next = head->next;
+		head->next = n;
+		return;
+	}
+
+	node* temp = head;
+	while (temp->data != key) {
+		temp = temp->next;
+		if (temp == NULL) {
+			return;
+		}
+	}
+	n->next = temp->next;
+	temp->next = n;
+}
+
+// Function to insert an
+// element at the end
+void insertattail(node*& head, int val)
+{
+	node* n = new node(val);
+	if (head == NULL) {
+		head = n;
+		return;
+	}
+
+	node* temp = head;
+	while (temp->next != NULL) {
+		temp = temp->next;
+	}
+	temp->next = n;
+}
+
+// Function to print the
+// singly linked list
+void print(node*& head)
+{
+	node* temp = head;
+
+	while (temp != NULL) {
+		cout << temp->data << " -> ";
+		temp = temp->next;
+	}
+	cout << "NULL" << endl;
+}
+
+// Main function
+int main()
+{
+
+	// Declaring an empty linked list
+	node* head = NULL;
+
+	insertathead(head, 1);
+	insertathead(head, 2);
+	cout << "After insertion at head: ";
+	print(head);
+	cout << endl;
+
+	insertattail(head, 4);
+	insertattail(head, 5);
+	cout << "After insertion at tail: ";
+	print(head);
+	cout << endl;
+
+	insertafter(head, 1, 2);
+	insertafter(head, 5, 6);
+	cout << "After insertion at a given position: ";
+	print(head);
+	cout << endl;
+
+	return 0;
+}
+
+
+
+2ND CODE:
+// C++ program for insertion in a single linked
+// list at a specified position
+#include <bits/stdc++.h>
+using namespace std;
+
+// A linked list Node
+struct Node {
+	int data;
+	struct Node* next;
+};
+
+// Size of linked list
+int size = 0;
+
+// function to create and return a Node
+Node* getNode(int data)
+{
+	// allocating space
+	Node* newNode = new Node();
+
+	// inserting the required data
+	newNode->data = data;
+	newNode->next = NULL;
+	return newNode;
+}
+
+// function to insert a Node at required position
+void insertPos(Node** current, int pos, int data)
+{
+	// This condition to check whether the
+	// position given is valid or not.
+	if (pos < 1 || pos > size + 1)
+		cout << "Invalid position!" << endl;
+	else {
+
+		// Keep looping until the pos is zero
+		while (pos--) {
+
+			if (pos == 0) {
+
+				// adding Node at required position
+				Node* temp = getNode(data);
+
+				// Making the new Node to point to
+				// the old Node at the same position
+				temp->next = *current;
+
+				// Changing the pointer of the Node previous
+				// to the old Node to point to the new Node
+				*current = temp;
+			}
+			else
+			// Assign double pointer variable to point to the
+			// pointer pointing to the address of next Node
+			current = &(*current)->next;
+		}
+		size++;
+	}
+}
+
+// This function prints contents
+// of the linked list
+void printList(struct Node* head)
+{
+	while (head != NULL) {
+		cout << " " << head->data;
+		head = head->next;
+	}
+	cout << endl;
+}
+
+// Driver Code
+int main()
+{
+	// Creating the list 3->5->8->10
+	Node* head = NULL;
+	head = getNode(3);
+	head->next = getNode(5);
+	head->next->next = getNode(8);
+	head->next->next->next = getNode(10);
+
+	size = 4;
+
+	cout << "Linked list before insertion: ";
+	printList(head);
+
+	int data = 12, pos = 3;
+	insertPos(&head, pos, data);
+	cout << "Linked list after insertion of 12 at position 3: ";
+	printList(head);
+
+	// front of the linked list
+	data = 1, pos = 1;
+	insertPos(&head, pos, data);
+	cout << "Linked list after insertion of 1 at position 1: ";
+	printList(head);
+
+	// insertion at end of the linked list
+	data = 15, pos = 7;
+	insertPos(&head, pos, data);
+	cout << "Linked list after insertion of 15 at position 7: ";
+	printList(head);
+
+	return 0;
+}
+ 
+ 
+ 3RD CODE:
+ // CPP program to remove last node of
+// linked list.
+#include <iostream>
+using namespace std;
+
+/* Link list node */
+struct Node {
+	int data;
+	struct Node* next;
+};
+
+/* Function to remove the last node
+of the linked list */
+Node* removeLastNode(struct Node* head)
+{
+	if (head == NULL)
+		return NULL;
+
+	if (head->next == NULL) {
+		delete head;
+		return NULL;
+	}
+
+	// Find the second last node
+	Node* second_last = head;
+	while (second_last->next->next != NULL)
+		second_last = second_last->next;
+
+	// Delete last node
+	delete (second_last->next);
+
+	// Change next of second last
+	second_last->next = NULL;
+
+	return head;
+}
+
+// Function to push node at head
+void push(struct Node** head_ref, int new_data)
+{
+	struct Node* new_node = new Node;
+	new_node->data = new_data;
+	new_node->next = (*head_ref);
+	(*head_ref) = new_node;
+}
+
+// Driver code
+int main()
+{
+	/* Start with the empty list */
+	Node* head = NULL;
+
+	/* Use push() function to construct
+	the below list 8 -> 23 -> 11 -> 29 -> 12 */
+	push(&head, 12);
+	push(&head, 29);
+	push(&head, 11);
+	push(&head, 23);
+	push(&head, 8);
+
+	head = removeLastNode(head);
+	for (Node* temp = head; temp != NULL; temp = temp->next)
+		cout << temp->data << " ";
+
+	return 0;
+}
+
+
+
+4TH CODE:
+// C++ program for above approach
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+
+// Create a class Node to enter values and address in the
+// list
+class Node {
+public:
+	int data;
+	Node* next;
+};
+
+// Function to reverse the linked list
+void reverseLL(Node** head)
+{
+	// Create a stack "s" of Node type
+	stack<Node*> s;
+	Node* temp = *head;
+	while (temp->next != NULL) {
+		// Push all the nodes in to stack
+		s.push(temp);
+		temp = temp->next;
+	}
+	*head = temp;
+	while (!s.empty()) {
+		// Store the top value of stack in list
+		temp->next = s.top();
+		// Pop the value from stack
+		s.pop();
+		// update the next pointer in the list
+		temp = temp->next;
+	}
+	temp->next = NULL;
+}
+
+// Function to Display the elements in List
+void printlist(Node* temp)
+{
+	while (temp != NULL) {
+		cout << temp->data << " ";
+		temp = temp->next;
+	}
+}
+
+// Program to insert back of the linked list
+void insert_back(Node** head, int value)
+{
+
+	// we have used insertion at back method to enter values
+	// in the list.(eg: head->1->2->3->4->Null)
+	Node* temp = new Node();
+	temp->data = value;
+	temp->next = NULL;
+
+	// If *head equals to NULL
+	if (*head == NULL) {
+		*head = temp;
+		return;
+	}
+	else {
+		Node* last_node = *head;
+		while (last_node->next != NULL)
+			last_node = last_node->next;
+		last_node->next = temp;
+		return;
+	}
+}
+
+// Driver Code
+int main()
+{
+	Node* head = NULL;
+	insert_back(&head, 1);
+	insert_back(&head, 2);
+	insert_back(&head, 3);
+	insert_back(&head, 4);
+	cout << "Given linked list\n";
+	printlist(head);
+	reverseLL(&head);
+	cout << "\nReversed linked list\n";
+	printlist(head);
+	return 0;
+}
+
+
+
+
+
+5TH CODE:
+// C++ program to find n-th node
+// from the end of the linked list.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node {
+	int data;
+	node* next;
+	node(int val)
+	{
+		data = val;
+		next = NULL;
+	}
+};
+
+struct llist {
+
+	node* head;
+	llist() { head = NULL; }
+
+	// insert operation at the beginning of the list.
+	void insertAtBegin(int val)
+	{
+		node* newNode = new node(val);
+		newNode->next = head;
+		head = newNode;
+	}
+
+	// finding n-th node from the end.
+	void nthFromEnd(int n)
+	{
+		// create two pointers main_ptr and ref_ptr
+		// initially pointing to head.
+		node* main_ptr = head;
+		node* ref_ptr = head;
+
+		// if list is empty, return
+		if (head == NULL) {
+			cout << "List is empty" << endl;
+			return;
+		}
+
+		// move ref_ptr to the n-th node from beginning.
+		for (int i = 1; i < n; i++) {
+			ref_ptr = ref_ptr->next;
+			if (ref_ptr == NULL) {
+				cout << n
+					<< " is greater than no. of nodes in "
+						"the list"
+					<< endl;
+				return;
+			}
+		}
+
+		// move ref_ptr and main_ptr by one node until
+		// ref_ptr reaches end of the list.
+		while (ref_ptr != NULL && ref_ptr->next != NULL) {
+			ref_ptr = ref_ptr->next;
+			main_ptr = main_ptr->next;
+		}
+		cout << "Node no. " << n
+			<< " from end is: " << main_ptr->data << endl;
+	}
+
+	void displaylist()
+	{
+		node* temp = head;
+		while (temp != NULL) {
+			cout << temp->data << "->";
+			temp = temp->next;
+		}
+		cout << "NULL" << endl;
+	}
+};
+
+// Driver's code
+int main()
+{
+	llist ll;
+
+	ll.insertAtBegin(20);
+	ll.insertAtBegin(4);
+	ll.insertAtBegin(15);
+	ll.insertAtBegin(35);
+
+	ll.displaylist();
+
+	// Function call
+	ll.nthFromEnd(4);
+
+	return 0;
+}
+
+// This code is contributed by sandeepkrsuman.
+
+
+
+6TH CODE:
+#include <bits/stdc++.h>
+using namespace std;
+
+// Link list node
+struct node
+{
+	int data;
+	struct node* next;
+};
+
+// Function to get the middle of
+// the linked list
+void printMiddle(struct node* head)
+{
+	int count = 0;
+	struct node* mid = head;
+
+	while (head != NULL)
+	{
+		
+		// Update mid, when 'count'
+		// is odd number
+		if (count & 1)
+			mid = mid->next;
+
+		++count;
+		head = head->next;
+	}
+
+	// If empty list is provided
+	if (mid != NULL)
+		printf("The middle element is [%d]\n\n",
+				mid->data);
+}
+
+void push(struct node** head_ref, int new_data)
+{
+	
+	// Allocate node
+	struct node* new_node = (struct node*)malloc(
+		sizeof(struct node));
+
+	// Put in the data
+	new_node->data = new_data;
+
+	// Link the old list of the new node
+	new_node->next = (*head_ref);
+
+	// Move the head to point to
+	// the new node
+	(*head_ref) = new_node;
+}
+
+// A utility function to print
+// a given linked list
+void printList(struct node* ptr)
+{
+	while (ptr != NULL)
+	{
+		printf("%d->", ptr->data);
+		ptr = ptr->next;
+	}
+	printf("NULL\n");
+}
+
+// Driver code
+int main()
+{
+	
+	// Start with the empty list
+	struct node* head = NULL;
+	int i;
+
+	for(i = 5; i > 0; i--)
+	{
+		push(&head, i);
+		printList(head);
+		printMiddle(head);
+	}
+	return 0;
+}
+
+
+
+
+7TH CODE:
+/*Given two sorted linked lists consisting of N and M nodes
+respectively. The task is to merge both of the list
+(in-place) and return head of the merged list.*/
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Link list Node */
+struct Node {
+	int key;
+	struct Node* next;
+};
+
+// Function to reverse a given Linked List using Recursion
+Node* reverseList(Node* head)
+{
+	if (head->next == NULL)
+		return head;
+	Node* rest = reverseList(head->next);
+	head->next->next = head;
+	head->next = NULL;
+	return rest;
+}
+
+// Given two non-empty linked lists 'a' and 'b'
+Node* sortedMerge(Node* a, Node* b)
+{
+	// Reverse Linked List 'a'
+	a = reverseList(a);
+	// Reverse Linked List 'b'
+	b = reverseList(b);
+	// Initialize head of resultant list
+	Node* head = NULL;
+	Node* temp;
+	// Traverse both lists while both of them
+	// have nodes.
+	while (a != NULL && b != NULL) {
+		// If a's current value is greater than or equal to
+		// b's current value.
+		if (a->key >= b->key) {
+			// Store next of current Node in first list
+			temp = a->next;
+			// Add 'a' at the front of resultant list
+			a->next = head;
+			// Make 'a' - head of the result list
+			head = a;
+			// Move ahead in first list
+			a = temp;
+		}
+
+		// If b's value is greater. Below steps are similar
+		// to above (Only 'a' is replaced with 'b')
+		else {
+			temp = b->next;
+			b->next = head;
+			head = b;
+			b = temp;
+		}
+	}
+
+	// If second list reached end, but first list has
+	// nodes. Add remaining nodes of first list at the
+	// beginning of result list
+	while (a != NULL) {
+		temp = a->next;
+		a->next = head;
+		head = a;
+		a = temp;
+	}
+
+	// If first list reached end, but second list has
+	// nodes. Add remaining nodes of second list at the
+	// beginning of result list
+	while (b != NULL) {
+		temp = b->next;
+		b->next = head;
+		head = b;
+		b = temp;
+	}
+	// Return the head of the result list
+	return head;
+}
+
+/* Function to print Nodes in a given linked list */
+void printList(struct Node* Node)
+{
+	while (Node != NULL) {
+		cout << Node->key << " ";
+		Node = Node->next;
+	}
+}
+
+/* Utility function to create a new node with
+given key */
+Node* newNode(int key)
+{
+	Node* temp = new Node;
+	temp->key = key;
+	temp->next = NULL;
+	return temp;
+}
+
+/* Driver program to test above functions*/
+int main()
+{
+	/* Start with the empty list */
+	struct Node* res = NULL;
+
+	/* Let us create two sorted linked lists to test
+	the above functions. Created lists shall be
+		a: 5->10->15->40
+		b: 2->3->20 */
+	Node* a = newNode(5);
+	a->next = newNode(10);
+	a->next->next = newNode(15);
+	a->next->next->next = newNode(40);
+
+	Node* b = newNode(2);
+	b->next = newNode(3);
+	b->next->next = newNode(20);
+
+	/* merge 2 sorted Linked Lists */
+	res = sortedMerge(a, b);
+
+	cout << "Merged Linked List is:" << endl;
+	printList(res);
+
+	return 0;
+}
+
+
+
+
+
+8TH CODE:
+#include <iostream>
+using namespace std;
+
+// Node structure
+struct Node {
+	int data;
+	Node* next;
+};
+
+// function to insert in list
+void insert(int x, Node** head)
+{
+	if (*head == NULL) {
+		*head = new Node;
+		(*head)->data = x;
+		(*head)->next = NULL;
+		return;
+	}
+	Node* temp = new Node;
+	temp->data = (*head)->data;
+	temp->next = (*head)->next;
+	(*head)->data = x;
+	(*head)->next = temp;
+}
+
+// function to print the list
+void print(Node* head)
+{
+	Node* temp = head;
+	while (temp != NULL) {
+		cout << temp->data << " ";
+		temp = temp->next;
+	}
+}
+
+Node* merge(Node* firstNode, Node* secondNode)
+{
+	Node* merged = new Node;
+	Node* temp = new Node;
+
+	// merged is equal to temp so in the end we have the top
+	// Node.
+	merged = temp;
+
+	// while either firstNode or secondNode becomes NULL
+	while (firstNode != NULL && secondNode != NULL) {
+
+		if (firstNode->data <= secondNode->data) {
+			temp->next = firstNode;
+			firstNode = firstNode->next;
+		}
+
+		else {
+			temp->next = secondNode;
+			secondNode = secondNode->next;
+		}
+		temp = temp->next;
+	}
+
+	// any remaining Node in firstNode or secondNode gets
+	// inserted in the temp List
+	while (firstNode != NULL) {
+		temp->next = firstNode;
+		firstNode = firstNode->next;
+		temp = temp->next;
+	}
+
+	while (secondNode != NULL) {
+		temp->next = secondNode;
+		secondNode = secondNode->next;
+		temp = temp->next;
+	}
+	// return the head of the sorted list
+	return merged->next;
+}
+
+// function to calculate the middle Element
+Node* middle(Node* head)
+{
+	Node* slow = head;
+	Node* fast = head->next;
+
+	while (!slow->next && (!fast && !fast->next)) {
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
+}
+
+// function to sort the given list
+Node* sort(Node* head)
+{
+
+	if (head->next == NULL) {
+		return head;
+	}
+
+	Node* mid = new Node;
+	Node* head2 = new Node;
+	mid = middle(head);
+	head2 = mid->next;
+	mid->next = NULL;
+	// recursive call to sort() hence diving our problem,
+	// and then merging the solution
+	Node* finalhead = merge(sort(head), sort(head2));
+	return finalhead;
+}
+int main(void)
+{
+	Node* head = NULL;
+	int n[] = { 7, 10, 5, 20, 3, 2 };
+	for (int i = 0; i < 6; i++) {
+		insert(n[i], &head); // inserting in the list
+	}
+	cout << "Sorted Linked List is: \n";
+	print(sort(head)); // printing the sorted list returned
+					// by sort()
+	return 0;
+}
+
+// This code is contributed by Aditya Kumar (adityakumar129)
+
+
+
+
+9TH CODE:
+// CPP program to reverse a linked list
+// in groups of given size
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Link list node */
+class Node {
+public:
+	int data;
+	Node* next;
+};
+
+/* Reverses the linked list in groups
+of size k and returns the pointer
+to the new head node. */
+Node* reverse(Node* head, int k)
+{
+	// If head is NULL or K is 1 then return head
+	if (!head || k == 1)
+		return head;
+
+	Node* dummy = new Node(); // creating dummy node
+	dummy->data = -1;
+	dummy->next = head;
+
+	// Initializing three points prev, curr, next
+	Node *prev = dummy, *curr = dummy, *next = dummy;
+
+	// Calculating the length of linked list
+	int count = 0;
+	while (curr) {
+		curr = curr->next;
+		count++;
+	}
+
+	// Iterating till next is not NULL
+	while (next) {
+		// Curr position after every reverse group
+		curr = prev->next;
+		// Next will always next to curr
+		next = curr->next;
+		// toLoop will set to count - 1 in case of remaining
+		// element
+		int toLoop = count > k ? k : count - 1;
+		for (int i = 1; i < toLoop; i++) {
+			// 4 steps as discussed above
+			curr->next = next->next;
+			next->next = prev->next;
+			prev->next = next;
+			next = curr->next;
+		}
+		// Setting prev to curr
+		prev = curr;
+		// Update count
+		count -= k;
+	}
+	// dummy -> next will be our new head for output linked
+	// list
+	return dummy->next;
+}
+
+/* UTILITY FUNCTIONS */
+/* Function to push a node */
+void push(Node** head_ref, int new_data)
+{
+	/* allocate node */
+	Node* new_node = new Node();
+
+	/* put in the data */
+	new_node->data = new_data;
+
+	/* link the old list of the new node */
+	new_node->next = (*head_ref);
+
+	/* move the head to point to the new node */
+	(*head_ref) = new_node;
+}
+
+/* Function to print linked list */
+void printList(Node* node)
+{
+	while (node != NULL) {
+		cout << node->data << " ";
+		node = node->next;
+	}
+}
+
+/* Driver code*/
+int main()
+{
+	/* Start with the empty list */
+	Node* head = NULL;
+
+	/* Created Linked list
+	is 1->2->3->4->5->6->7->8->9 */
+	push(&head, 9);
+	push(&head, 8);
+	push(&head, 7);
+	push(&head, 6);
+	push(&head, 5);
+	push(&head, 4);
+	push(&head, 3);
+	push(&head, 2);
+	push(&head, 1);
+
+	cout << "Given linked list \n";
+	printList(head);
+	head = reverse(head, 3);
+
+	cout << "\nReversed Linked list \n";
+	printList(head);
+
+	return (0);
+}
+
+
+
+
+
+10TH CODE:
+// Recursive program to check if a given linked list is
+// palindrome
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Link list node */
+struct node {
+	char data;
+	struct node* next;
+};
+
+// Initial parameters to this function are &head and head
+bool isPalindromeUtil(struct node** left,
+					struct node* right)
+{
+	/* stop recursion when right becomes NULL */
+	if (right == NULL)
+		return true;
+
+	/* If sub-list is not palindrome then no need to
+	check for current left and right, return false */
+	bool isp = isPalindromeUtil(left, right->next);
+	if (isp == false)
+		return false;
+
+	/* Check values at current left and right */
+	bool isp1 = (right->data == (*left)->data);
+
+	/* Move left to next node */
+	*left = (*left)->next;
+
+	return isp1;
+}
+
+// A wrapper over isPalindromeUtil()
+bool isPalindrome(struct node* head)
+{
+	return isPalindromeUtil(&head, head);
+}
+
+/* Push a node to linked list. Note that this function
+changes the head */
+void push(struct node** head_ref, char new_data)
+{
+	/* allocate node */
+	struct node* new_node
+		= (struct node*)malloc(sizeof(struct node));
+
+	/* put in the data */
+	new_node->data = new_data;
+
+	/* link the old list of the new node */
+	new_node->next = (*head_ref);
+
+	/* move the head to point to the new node */
+	(*head_ref) = new_node;
+}
+
+// A utility function to print a given linked list
+void printList(struct node* ptr)
+{
+	while (ptr != NULL) {
+		cout << ptr->data << "->";
+		ptr = ptr->next;
+	}
+	cout << "NULL\n";
+}
+
+/* Driver program to test above function*/
+int main()
+{
+	/* Start with the empty list */
+	struct node* head = NULL;
+	char str[] = "abacaba";
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++) {
+		push(&head, str[i]);
+	}
+	isPalindrome(head) ? cout << "Is Palindrome\n\n"
+					: cout << "Not Palindrome\n\n";
+	return 0;
+}
+// this code is contributed by shivanisinghss2110
+
+
+
+11TH CODE:
+// C++ implementation
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Creating the structure for node
+struct Node {
+	int data;
+	struct Node* next;
+};
+
+// Function to create newNode in a linkedlist
+Node* newNode(int key)
+{
+	Node* temp = new Node;
+	temp->data = key;
+	temp->next = NULL;
+	return temp;
+}
+
+// Function to print the list
+void printlist(Node* head)
+{
+	while (head) {
+		cout << head->data;
+		if (head->next)
+			cout << "->";
+		head = head->next;
+	}
+	cout << endl;
+}
+
+// Function to rearrange
+void rearrange(Node** head, Node* last)
+{
+	if (!last)
+		return;
+	// Recursive call
+	rearrange(head, last->next);
+	// (*head)->next will be set to NULL after
+	// rearrangement. Need not do any operation further Just
+	// return here to come out of recursion
+	if (!(*head)->next)
+		return;
+
+	// Rearrange the list until both head and last meet or
+	// next to each other.
+	if ((*head) != last && (*head)->next != last) {
+		Node* tmp = (*head)->next;
+		(*head)->next = last;
+		last->next = tmp;
+		*head = tmp;
+	}
+	else {
+		if ((*head) != last)
+			*head = (*head)->next;
+		(*head)->next = NULL;
+	}
+}
+
+// Drivers Code
+int main()
+{
+	Node* head = newNode(1);
+	head->next = newNode(2);
+	head->next->next = newNode(3);
+	head->next->next->next = newNode(4);
+	head->next->next->next->next = newNode(5);
+
+	// Print original list
+	printlist(head);
+
+	Node* tmp = head;
+
+	// Modify the list
+	rearrange(&tmp, head);
+
+	// Print modified list
+	printlist(head);
+	return 0;
+}
+
+
+
+
+
+12TH CODE:
+#include <iostream>
+using namespace std;
+
+struct Node {
+	int data;
+	struct Node* next;
+};
+
+// recursive function
+Node* addition(Node* temp1, Node* temp2, int size1,
+			int size2)
+{
+	// creating a new Node
+	Node* newNode
+		= (struct Node*)malloc(sizeof(struct Node));
+
+	// base case
+	if (temp1->next == NULL && temp2->next == NULL) {
+		// addition of current nodes which is the last nodes
+		// of both linked lists
+		newNode->data = (temp1->data + temp2->data);
+
+		// set this current node's link null
+		newNode->next = NULL;
+
+		// return the current node
+		return newNode;
+	}
+
+	// creating a node that contains sum of previously added
+	// number
+	Node* returnedNode
+		= (struct Node*)malloc(sizeof(struct Node));
+
+	// if sizes are same then we move in both linked list
+	if (size2 == size1) {
+		// recursively call the function
+		// move ahead in both linked list
+		returnedNode = addition(temp1->next, temp2->next,
+								size1 - 1, size2 - 1);
+
+		// add the current nodes and append the carry
+		newNode->data = (temp1->data + temp2->data)
+						+ ((returnedNode->data) / 10);
+	}
+	// or else we just move in big linked list
+	else {
+		// recursively call the function
+		// move ahead in big linked list
+		returnedNode = addition(temp1, temp2->next, size1,
+								size2 - 1);
+
+		// add the current node and carry
+		newNode->data
+			= (temp2->data) + ((returnedNode->data) / 10);
+	}
+
+	// this node contains previously added numbers
+	// so we need to set only rightmost digit of it
+	returnedNode->data = (returnedNode->data) % 10;
+
+	// set the returned node to the current node
+	newNode->next = returnedNode;
+
+	// return the current node
+	return newNode;
+}
+
+// Function to add two numbers represented by nexted list.
+struct Node* addTwoLists(struct Node* head1,
+						struct Node* head2)
+{
+	struct Node *temp1, *temp2, *ans = NULL;
+
+	temp1 = head1;
+	temp2 = head2;
+
+	int size1 = 0, size2 = 0;
+
+	// calculating the size of first linked list
+	while (temp1 != NULL) {
+		temp1 = temp1->next;
+		size1++;
+	}
+	// calculating the size of second linked list
+	while (temp2 != NULL) {
+		temp2 = temp2->next;
+		size2++;
+	}
+
+	Node* returnedNode
+		= (struct Node*)malloc(sizeof(struct Node));
+
+	// traverse the bigger linked list
+	if (size2 > size1) {
+		returnedNode = addition(head1, head2, size1, size2);
+	}
+	else {
+		returnedNode = addition(head2, head1, size2, size1);
+	}
+
+	// creating new node if head node is >10
+	if (returnedNode->data >= 10) {
+		ans = (struct Node*)malloc(sizeof(struct Node));
+		ans->data = (returnedNode->data) / 10;
+		returnedNode->data = returnedNode->data % 10;
+		ans->next = returnedNode;
+	}
+	else
+		ans = returnedNode;
+
+	// return the head node of linked list that contains
+	// answer
+	return ans;
+}
+
+void Display(Node* head)
+{
+	if (head == NULL) {
+		return;
+	}
+	while (head->next != NULL) {
+		cout << head->data << " -> ";
+		head = head->next;
+	}
+	cout << head->data << endl;
+}
+// Function that adds element at the end of the Linked List
+void push(Node** head_ref, int d)
+{
+	Node* new_node
+		= (struct Node*)malloc(sizeof(struct Node));
+	new_node->data = d;
+	new_node->next = NULL;
+	if (*head_ref == NULL) {
+		new_node->next = *head_ref;
+		*head_ref = new_node;
+		return;
+	}
+	Node* last = *head_ref;
+	while (last->next != NULL && last != NULL) {
+		last = last->next;
+	}
+	last->next = new_node;
+	return;
+}
+// Driver Program for above Functions
+int main()
+{
+	// Creating two lists
+	Node* first = NULL;
+	Node* second = NULL;
+	Node* sum = NULL;
+	push(&first, 7);
+	push(&first, 5);
+	push(&first, 9);
+	push(&first, 4);
+	push(&first, 6);
+	push(&second, 8);
+	push(&second, 4);
+	cout << "First List : ";
+	Display(first);
+	cout << "Second List : ";
+	Display(second);
+	sum = addTwoLists(first, second);
+	cout << "Sum List : ";
+	Display(sum);
+	return 0;
+}
+
+13 TH CODE :
+// C++ program to get intersection point of two linked list
+#include <bits/stdc++.h>
+using namespace std;
+
+/* Link list node */
+class Node {
+public:
+	int data;
+	Node* next;
+};
+
+/* Function to get the counts of node in a linked list */
+int getCount(Node* head);
+
+/* function to get the intersection point of two linked
+lists head1 and head2 where head1 has d more nodes than
+head2 */
+int _getIntesectionNode(int d, Node* head1, Node* head2);
+
+/* function to get the intersection point of two linked
+lists head1 and head2 */
+int getIntesectionNode(Node* head1, Node* head2)
+{
+
+	// Count the number of nodes in
+	// both the linked list
+	int c1 = getCount(head1);
+	int c2 = getCount(head2);
+	int d;
+
+	// If first is greater
+	if (c1 > c2) {
+		d = c1 - c2;
+		return _getIntesectionNode(d, head1, head2);
+	}
+	else {
+		d = c2 - c1;
+		return _getIntesectionNode(d, head2, head1);
+	}
+}
+
+/* function to get the intersection point of two linked
+lists head1 and head2 where head1 has d more nodes than
+head2 */
+int _getIntesectionNode(int d, Node* head1, Node* head2)
+{
+	// Stand at the starting of the bigger list
+	Node* current1 = head1;
+	Node* current2 = head2;
+
+	// Move the pointer forward
+	for (int i = 0; i < d; i++) {
+		if (current1 == NULL) {
+			return -1;
+		}
+		current1 = current1->next;
+	}
+
+	// Move both pointers of both list till they
+	// intersect with each other
+	while (current1 != NULL && current2 != NULL) {
+		if (current1 == current2)
+			return current1->data;
+
+		// Move both the pointers forward
+		current1 = current1->next;
+		current2 = current2->next;
+	}
+
+	return -1;
+}
+
+/* Takes head pointer of the linked list and
+returns the count of nodes in the list */
+int getCount(Node* head)
+{
+	Node* current = head;
+
+	// Counter to store count of nodes
+	int count = 0;
+
+	// Iterate till NULL
+	while (current != NULL) {
+
+		// Increase the counter
+		count++;
+
+		// Move the Node ahead
+		current = current->next;
+	}
+
+	return count;
+}
+
+// Driver Code
+int main()
+{
+	/*
+		Create two linked lists
+	
+		1st 3->6->9->15->30
+		2nd 10->15->30
+	
+		15 is the intersection point
+	*/
+
+	Node* newNode;
+
+	// Addition of new nodes
+	Node* head1 = new Node();
+	head1->data = 10;
+
+	Node* head2 = new Node();
+	head2->data = 3;
+
+	newNode = new Node();
+	newNode->data = 6;
+	head2->next = newNode;
+
+	newNode = new Node();
+	newNode->data = 9;
+	head2->next->next = newNode;
+
+	newNode = new Node();
+	newNode->data = 15;
+	head1->next = newNode;
+	head2->next->next->next = newNode;
+
+	newNode = new Node();
+	newNode->data = 30;
+	head1->next->next = newNode;
+
+	head1->next->next->next = NULL;
+
+	cout << "The node of intersection is " << getIntesectionNode(head1, head2);
+}
+
+
+
+
+
